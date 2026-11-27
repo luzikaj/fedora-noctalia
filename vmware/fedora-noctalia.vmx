@@ -1,6 +1,6 @@
 .encoding = "UTF-8"
 config.version = "8"
-virtualHW.version = "20"
+virtualHW.version = "21"
 displayName = "@NAME@"
 guestOS = "fedora-64"
 
@@ -48,3 +48,9 @@ sound.virtualDev = "hdaudio"
 sound.autoDetect = "TRUE"
 
 tools.syncTime = "TRUE"
+
+# Serial console -> serial.log next to the .vmx (kernel + system log, for debugging)
+serial0.present = "TRUE"
+serial0.fileType = "file"
+serial0.fileName = "serial.log"
+serial0.tryNoRxLoss = "FALSE"

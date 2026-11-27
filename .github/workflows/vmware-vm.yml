@@ -59,6 +59,10 @@ jobs:
           [[customizations.filesystem]]
           mountpoint = "/"
           minsize = "$VM_SIZE"
+
+          # Copy the system log to the serial console (serial.log on the host)
+          [customizations.kernel]
+          append = "console=tty0 console=ttyS0,115200 systemd.journald.forward_to_console=1"
           EOF
 
       - name: Build disk (qcow2)
