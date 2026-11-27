@@ -19,7 +19,9 @@ build_files/finalize.sh       greetd, services, Umbriel config validation
 system_files/                 copied onto / (etc/xdg/umbriel/config.toml, etc/skel, etc/keyd, units)
 scripts/import-my-dotfiles.sh pulls your helix/fresh/ghostty/k9s/keyd configs into system_files
 iso/config.toml               Anaconda ISO settings for bootc-image-builder
-.github/workflows/            build+push to ghcr.io, and an on-demand ISO build
+vmware/fedora-noctalia.vmx    VMware Workstation VM template (3D, UEFI, SATA, NAT)
+artwork/                      wallpaper + keybind cheat-sheet generators
+.github/workflows/            image build+push, on-demand ISO and VMware VM builds
 ```
 
 ## First run
@@ -28,8 +30,11 @@ iso/config.toml               Anaconda ISO settings for bootc-image-builder
    `./scripts/import-my-dotfiles.sh`, then review `git diff` (keep secrets and kubeconfigs out).
 2. Push to GitHub. The **build-image** workflow pushes `ghcr.io/<you>/<repo>:latest`.
    In the package settings, make the package **public**, or installed machines will need registry credentials to update.
-3. Run **build-iso** (Actions → build-iso → Run workflow) and download the ISO artifact.
-4. Test it in your VirtualBox VM first (EFI on, 4+ GB RAM, VMSVGA with 3D).
+3. Test in VMware Workstation: run **build-vmware-vm**, download the `vmware-vm` artifact,
+   unzip it on a drive with space, and File → Open `fedora-noctalia.vmx`.
+   Log in as your user (password: secret `VM_PASSWORD`, else `changeme`), then `passwd`.
+   No installer involved; keyboard layout: `sudo localectl set-x11-keymap <layout> "" <variant>`.
+4. For real hardware, run **build-iso** and write the ISO to a USB stick.
    In the installer, choose your keyboard layout and create your user.
 5. Log in through the Noctalia greeter, selecting the Umbriel session.
 

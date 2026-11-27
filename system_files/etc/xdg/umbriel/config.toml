@@ -155,9 +155,9 @@ match.title = "^(Picture-in-Picture|Picture in picture)$"
 default_floating = true
 default_position = { x = 20, y = 20, anchor = "bottom_right" }
 
-# Keep compositor shortcuts in VirtualBox / virt-manager windows
+# Keep compositor shortcuts in virt-manager windows
 [[window_rule]]
-match.app_id = "^(VirtualBox Machine|virt-manager)$"
+match.app_id = "^virt-manager$"
 allow_shortcuts_inhibit = false
 
 [[layer_rule]]
