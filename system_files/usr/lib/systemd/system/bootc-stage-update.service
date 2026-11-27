@@ -1,0 +1,8 @@
+[Unit]
+Description=Download and stage a new OS image (applied on next reboot)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bootc upgrade --quiet

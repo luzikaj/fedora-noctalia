@@ -1,0 +1,49 @@
+name: build-iso
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Image tag to turn into an installer ISO
+        default: latest
+
+jobs:
+  iso:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Image name (lowercase)
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}:${{ inputs.tag }}" >> "$GITHUB_ENV"
+
+      - name: Free disk space
+        run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+
+      - name: Pull image into root storage
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | sudo podman login ghcr.io -u "${{ github.actor }}" --password-stdin
+          sudo podman pull "$IMAGE"
+
+      - name: Build ISO
+        run: |
+          mkdir -p output
+          sudo podman run --rm --privileged --pull=newer \
+            --security-opt label=type:unconfined_t \
+            -v ./output:/output \
+            -v /var/lib/containers/storage:/var/lib/containers/storage \
+            -v ./iso/config.toml:/config.toml:ro \
+            quay.io/centos-bootc/bootc-image-builder:latest \
+            --type anaconda-iso \
+            --rootfs btrfs \
+            --chown "$(id -u):$(id -g)" \
+            "$IMAGE"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: installer-iso
+          path: output/bootiso/*.iso
+          compression-level: 0
+          retention-days: 7

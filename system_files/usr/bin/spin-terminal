@@ -1,0 +1,6 @@
+#!/bin/sh
+# Preferred terminal with a fallback, so Mod+Return always opens something.
+if command -v ghostty >/dev/null 2>&1; then
+    exec ghostty "$@"
+fi
+exec foot "$@"

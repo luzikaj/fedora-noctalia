@@ -1,0 +1,11 @@
+# bootc-image-builder settings for the Anaconda installer ISO.
+# The installer asks for keyboard layout, disk and your user account; the
+# chosen layout becomes the localectl X11 keymap that Umbriel uses.
+[customizations.installer.kickstart]
+contents = "graphical"
+
+[customizations.installer.modules]
+enable = [
+  "org.fedoraproject.Anaconda.Modules.Localization",
+  "org.fedoraproject.Anaconda.Modules.Users",
+]

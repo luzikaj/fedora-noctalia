@@ -1,0 +1,9 @@
+# Optional packages: installed when a repo has them, otherwise the build only
+# prints a warning (see the build log). Move a line to packages.txt once you
+# know which repo provides it.
+
+ghostty
+keyd
+k9s
+fresh-editor
+xdg-desktop-portal-umbriel

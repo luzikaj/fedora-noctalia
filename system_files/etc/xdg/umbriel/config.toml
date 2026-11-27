@@ -1,0 +1,169 @@
+# System-wide Umbriel defaults for this spin (/etc/xdg/umbriel/config.toml).
+# A user's ~/.config/umbriel/config.toml replaces this file entirely; copy it
+# there to customise. Validate with: umbriel config validate
+#
+# Keybind design: one-handed, right hand, Dvorak.
+#   * Mod + exactly one key, never Shift.
+#   * Keys are named by the symbol they type on Dvorak (bindings match keysyms).
+#   * Mod is Super; keyd turns held Right Alt into Super (see /etc/keyd/).
+
+[general]
+autostart = ["noctalia"]
+mod_key = "Super"
+show_cheatsheet = false
+
+[environment]
+ELECTRON_OZONE_PLATFORM_HINT = "auto"
+
+# Keyboard layout comes from `localectl set-x11-keymap` (set by the installer)
+# because no layout/variant/options keys are set here.
+[input.keyboard]
+numlock_toggle = true
+repeat_rate = 30
+repeat_delay = 300
+
+[input.cursor]
+hide_when_typing = true
+
+[appearance]
+prefer_no_csd = true
+border_width = 2
+corner_radius = 10
+
+[appearance.blur]
+enabled = true
+optimized = true
+passes = 2
+radius = 3
+noise = 0.02
+brightness = 0.9
+contrast = 0.9
+saturation = 1.1
+
+[layout]
+extent_presets = [0.333, 0.5, 0.667]
+
+[layout.scrolling]
+default_extent_fraction = 0.5
+
+# ------------------------------------------------------------------------------
+# Keybinds. Defining this table replaces Umbriel's built-in set.
+# Physical QWERTY position in brackets.
+[keybinds]
+# Launcher: tap Mod alone, or Mod+Space if keyd does not pass a lone tap
+"Mod" = "spawn noctalia msg panel-toggle launcher"
+"Mod+Space" = { action = "spawn noctalia msg panel-toggle launcher", repeat = false }
+"Mod+Return" = { action = "spawn spin-terminal", repeat = false }
+"Mod+BackSpace" = { action = "window-close", repeat = false }
+
+# Focus: home row  D H T N  [h j k l]
+"Mod+D" = "window-focus-left"
+"Mod+H" = "window-focus-down"
+"Mod+T" = "window-focus-up"
+"Mod+N" = "window-focus-right"
+
+# Move: row above  F G C R  [y u i o]
+"Mod+F" = "column-move-left"
+"Mod+G" = "window-move-down"
+"Mod+C" = "window-move-up"
+"Mod+R" = "column-move-right"
+
+# Arrows mirror focus
+"Mod+Left" = "window-focus-left"
+"Mod+Down" = "window-focus-down"
+"Mod+Up" = "window-focus-up"
+"Mod+Right" = "window-focus-right"
+
+# Overview, window state
+"Mod+S" = { action = "overview-toggle", repeat = false }                    # [;]
+"Mod+L" = { action = "window-toggle-fullscreen", repeat = false }           # [p]
+"Mod+M" = { action = "window-toggle-maximize-to-edges", repeat = false }    # [m]
+"Mod+Z" = { action = "window-toggle-floating", repeat = false }             # [/]
+"Mod+W" = "window-consume-left"                                             # [,]
+"Mod+V" = "window-consume-right"                                            # [.]
+
+# Width
+"Mod+Slash" = "window-cycle-primary-extent"                                 # [[]
+"Mod+Minus" = "window-modify-primary-extent -0.05"                          # [']
+"Mod+Equal" = "window-modify-primary-extent +0.05"                          # []]
+
+# Tabs
+"Mod+BracketLeft" = { action = "column-toggle-tabbed", repeat = false }     # [-]
+"Mod+BracketRight" = "column-focus-tab-next"                                # [=]
+
+# Workspaces 1-5 on the right-hand digits
+"Mod+6" = "workspace-switch 1"
+"Mod+7" = "workspace-switch 2"
+"Mod+8" = "workspace-switch 3"
+"Mod+9" = "workspace-switch 4"
+"Mod+0" = "workspace-switch 5"
+"Mod+Page_Up" = "workspace-previous"
+"Mod+Page_Down" = "workspace-next"
+
+# Send window to workspace without Shift: Mod+B [n], then 6..0
+"Mod+B" = { action = "submap send", repeat = false }
+"submap[send],6" = { action = "window-move-to-workspace 1", submap = "reset" }
+"submap[send],7" = { action = "window-move-to-workspace 2", submap = "reset" }
+"submap[send],8" = { action = "window-move-to-workspace 3", submap = "reset" }
+"submap[send],9" = { action = "window-move-to-workspace 4", submap = "reset" }
+"submap[send],0" = { action = "window-move-to-workspace 5", submap = "reset" }
+"submap[send],Page_Up" = { action = "window-move-to-workspace-previous", submap = "reset" }
+"submap[send],Page_Down" = { action = "window-move-to-workspace-next", submap = "reset" }
+"submap[send],Escape" = "submap reset"
+"submap[send],BackSpace" = "submap reset"
+
+# Noctalia panels on the editing block (right of Enter)
+"Mod+Insert" = "spawn noctalia msg panel-toggle clipboard"
+"Mod+Home" = "spawn noctalia msg panel-toggle control-center"
+"Mod+End" = "spawn noctalia msg settings-toggle"
+"Mod+Delete" = "spawn noctalia msg panel-toggle session"
+"Mod+Backslash" = "cheatsheet-toggle"
+"Print" = { action = "spawn noctalia msg screenshot-region", repeat = false }
+
+# Pass all keys to a game/VM; press again to get them back
+"Mod+Pause" = { action = "shortcuts-inhibit-toggle", allow_when_inhibited = true, repeat = false }
+
+# Media and brightness keys via Noctalia (shows OSD, works when locked)
+"XF86AudioRaiseVolume" = { action = "spawn noctalia msg volume-up", allow_when_locked = true }
+"XF86AudioLowerVolume" = { action = "spawn noctalia msg volume-down", allow_when_locked = true }
+"XF86AudioMute" = { action = "spawn noctalia msg volume-mute", allow_when_locked = true, repeat = false }
+"XF86AudioPlay" = { action = "spawn noctalia msg media toggle", allow_when_locked = true, repeat = false }
+"XF86AudioNext" = { action = "spawn noctalia msg media next", allow_when_locked = true }
+"XF86AudioPrev" = { action = "spawn noctalia msg media previous", allow_when_locked = true }
+"XF86MonBrightnessUp" = { action = "spawn noctalia msg brightness-up", allow_when_locked = true }
+"XF86MonBrightnessDown" = { action = "spawn noctalia msg brightness-down", allow_when_locked = true }
+
+# ------------------------------------------------------------------------------
+[[window_rule]]
+blur = true
+blur_optimized = true
+
+[[window_rule]]
+match.app_id = "^dev.noctalia.Noctalia$"
+default_floating = true
+default_floating_size_px = { width = 1020, height = 900 }
+
+[[window_rule]]
+match.app_id = "^dev.noctalia.UmbrielSharePicker$"
+default_floating = true
+default_floating_size_px = { width = 800, height = 600 }
+
+[[window_rule]]
+match.title = "^(Picture-in-Picture|Picture in picture)$"
+default_floating = true
+default_position = { x = 20, y = 20, anchor = "bottom_right" }
+
+# Keep compositor shortcuts in VirtualBox / virt-manager windows
+[[window_rule]]
+match.app_id = "^(VirtualBox Machine|virt-manager)$"
+allow_shortcuts_inhibit = false
+
+[[layer_rule]]
+match.namespace = "^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd|desktop-widget-[^\"]*)$"
+blur = true
+blur_ignore_alpha = 0.5
+blur_popups = true
+
+[[layer_rule]]
+match.namespace = "^noctalia-(notification|dock|panel|attached-panel|osd)$"
+blur_optimized = false

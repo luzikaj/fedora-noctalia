@@ -1,0 +1,12 @@
+[Unit]
+Description=Initialize Noctalia greeter state on first boot
+ConditionPathExists=!/var/lib/noctalia-greeter/greeter.toml
+After=systemd-tmpfiles-setup.service
+Before=greetd.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/noctalia-greeter-apply-appearance --setup-system
+
+[Install]
+WantedBy=multi-user.target

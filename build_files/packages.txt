@@ -1,0 +1,39 @@
+# Required packages. The build fails if any of these is missing.
+
+# --- Desktop: compositor, shell, login screen (umbriel + greeter come from Terra)
+umbriel-nightly
+noctalia
+noctalia-greeter
+greetd
+
+# --- Session plumbing
+xorg-x11-server-Xwayland
+xdg-desktop-portal
+xdg-desktop-portal-gtk
+xdg-user-dirs
+polkit
+accountsservice
+gnome-keyring
+pipewire
+pipewire-pulseaudio
+wireplumber
+NetworkManager-wifi
+bluez
+mesa-dri-drivers
+mesa-vulkan-drivers
+libheif
+
+# --- Fonts
+google-noto-sans-fonts
+google-noto-color-emoji-fonts
+jetbrains-mono-fonts-all
+
+# --- CLI / tools
+helix
+foot
+git
+wl-clipboard
+brightnessctl
+playerctl
+flatpak
+fwupd
