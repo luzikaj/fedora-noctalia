@@ -50,6 +50,11 @@ Edit the repo and push. CI also rebuilds weekly.
 
 ## Keybinds (Dvorak letters, QWERTY position in brackets)
 
+The default desktop wallpaper is a cheat sheet of these keys
+(`artwork/make-cheatsheet.py`; re-run it after changing binds:
+`python3 artwork/make-cheatsheet.py system_files/usr/share/backgrounds/fedora-noctalia`).
+The plain `noctalia-night-*.jpg` versions are in `/usr/share/backgrounds/fedora-noctalia/`.
+
 | Keys | Action |
 |---|---|
 | Mod (tap) / Mod+Space | Noctalia launcher |

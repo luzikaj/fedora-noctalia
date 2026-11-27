@@ -50,7 +50,7 @@ systemctl enable bootc-stage-update.timer
 # Fail the build on a broken Umbriel config instead of at first login.
 XDG_CONFIG_HOME=/nonexistent XDG_CONFIG_DIRS=/etc/xdg umbriel config validate
 noctalia config validate /etc/xdg/noctalia/10-fedora-noctalia.toml
-test -r /usr/share/backgrounds/fedora-noctalia/noctalia-night-3840x2160.jpg
+test -r /usr/share/backgrounds/fedora-noctalia/noctalia-night-cheatsheet-3840x2160.jpg
 
 for bin in umbriel start-umbriel noctalia noctalia-greeter-session; do
     command -v "$bin" >/dev/null || { echo "missing binary: $bin"; exit 1; }

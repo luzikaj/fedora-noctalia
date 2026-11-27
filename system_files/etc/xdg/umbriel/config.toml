@@ -3,6 +3,8 @@
 # there to customise. Validate with: umbriel config validate
 #
 # Keybind design: one-handed, right hand, Dvorak.
+# The desktop wallpaper is a cheat sheet of these binds: after changing them,
+# update artwork/make-cheatsheet.py and re-run it.
 #   * Mod + exactly one key, never Shift.
 #   * Keys are named by the symbol they type on Dvorak (bindings match keysyms).
 #   * Mod is Super; keyd turns held Right Alt into Super (see /etc/keyd/).

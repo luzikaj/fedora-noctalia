@@ -1,3 +1,5 @@
+# Default wallpaper is the keybind cheat sheet; the plain noctalia-night-*.jpg
+# versions sit next to it in /usr/share/backgrounds/fedora-noctalia/.
 # Distribution defaults for Noctalia (loaded before ~/.config/noctalia/ and
 # the Settings UI, so anything you set yourself wins).
 
@@ -10,4 +12,4 @@ fill_mode = "crop"
 fill_color = "#0b0d1f"
 
 [wallpaper.default]
-path = "/usr/share/backgrounds/fedora-noctalia/noctalia-night-3840x2160.jpg"
+path = "/usr/share/backgrounds/fedora-noctalia/noctalia-night-cheatsheet-3840x2160.jpg"
