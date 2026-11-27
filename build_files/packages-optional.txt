@@ -7,3 +7,7 @@ keyd
 k9s
 fresh-editor
 xdg-desktop-portal-umbriel
+
+# VirtualBox guest tools (clipboard, time sync). Its services only start
+# inside VirtualBox, so this is harmless on real hardware.
+virtualbox-guest-additions
