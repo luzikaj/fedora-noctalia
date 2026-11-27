@@ -1,0 +1,75 @@
+name: build-vm-disk
+
+# Ready-to-boot VirtualBox disk (VMDK) - no installer needed.
+# Password: repo secret VM_PASSWORD if set, otherwise "changeme".
+# Change it after first login with `passwd`.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Image tag
+        default: latest
+      username:
+        description: User to create (member of wheel)
+        default: luzikaj
+      size:
+        description: Root filesystem size
+        default: 40 GiB
+
+jobs:
+  vmdk:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - name: Image name (lowercase)
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}:${{ inputs.tag }}" >> "$GITHUB_ENV"
+
+      - name: Free disk space
+        run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+
+      - name: Pull image into root storage
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | sudo podman login ghcr.io -u "${{ github.actor }}" --password-stdin
+          sudo podman pull "$IMAGE"
+
+      - name: Write builder config (user + disk size)
+        env:
+          VM_PASSWORD: ${{ secrets.VM_PASSWORD || 'changeme' }}
+          VM_USER: ${{ inputs.username }}
+          VM_SIZE: ${{ inputs.size }}
+        run: |
+          hash=$(openssl passwd -6 "$VM_PASSWORD")
+          cat > vm-config.toml <<EOF
+          [[customizations.user]]
+          name = "$VM_USER"
+          password = "$hash"
+          groups = ["wheel"]
+
+          [[customizations.filesystem]]
+          mountpoint = "/"
+          minsize = "$VM_SIZE"
+          EOF
+
+      - name: Build VMDK
+        run: |
+          mkdir -p output
+          sudo podman run --rm --privileged --pull=newer \
+            --security-opt label=type:unconfined_t \
+            -v ./output:/output \
+            -v /var/lib/containers/storage:/var/lib/containers/storage \
+            -v ./vm-config.toml:/config.toml:ro \
+            quay.io/centos-bootc/bootc-image-builder:latest \
+            --type vmdk \
+            --rootfs ext4 \
+            --chown "$(id -u):$(id -g)" \
+            "$IMAGE"
+          ls -lh output/vmdk/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: virtualbox-vmdk
+          path: output/vmdk/*.vmdk
+          retention-days: 7
