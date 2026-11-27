@@ -89,9 +89,10 @@ jobs:
             output/qcow2/disk.qcow2 "vm/$VM_NAME/$VM_NAME.vmdk"
           sed "s/@NAME@/$VM_NAME/g" vmware/fedora-noctalia.vmx > "vm/$VM_NAME/$VM_NAME.vmx"
           ls -lh "vm/$VM_NAME"
+          echo "ART_NAME=fedora-noctalia-45-$(date -u +%Y%m%d)-vmware-vm" >> "$GITHUB_ENV"
 
       - uses: actions/upload-artifact@v4
         with:
-          name: vmware-vm
+          name: ${{ env.ART_NAME }}
           path: vm/
           retention-days: 7

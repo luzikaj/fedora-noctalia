@@ -30,7 +30,7 @@ artwork/                      wallpaper + keybind cheat-sheet generators
    `./scripts/import-my-dotfiles.sh`, then review `git diff` (keep secrets and kubeconfigs out).
 2. Push to GitHub. The **build-image** workflow pushes `ghcr.io/<you>/<repo>:latest`.
    In the package settings, make the package **public**, or installed machines will need registry credentials to update.
-3. Test in VMware Workstation: run **build-vmware-vm**, download the `vmware-vm` artifact,
+3. Test in VMware Workstation: run **build-vmware-vm**, download the `fedora-noctalia-45-<date>-vmware-vm` artifact,
    unzip it on a drive with space, and File → Open `fedora-noctalia.vmx`.
    Log in as your user (password: secret `VM_PASSWORD`, else `changeme`), then `passwd`.
    No installer involved; keyboard layout: `sudo localectl set-x11-keymap <layout> "" <variant>`.

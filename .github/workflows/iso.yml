@@ -7,6 +7,9 @@ on:
         description: Image tag to turn into an installer ISO
         default: latest
 
+env:
+  FEDORA_VERSION: "45"
+
 jobs:
   iso:
     runs-on: ubuntu-24.04
@@ -41,9 +44,15 @@ jobs:
             --chown "$(id -u):$(id -g)" \
             "$IMAGE"
 
+      - name: Descriptive file name
+        run: |
+          name="fedora-noctalia-${FEDORA_VERSION}-$(date -u +%Y%m%d)-x86_64"
+          mv output/bootiso/*.iso "output/bootiso/${name}.iso"
+          echo "ISO_NAME=${name}" >> "$GITHUB_ENV"
+
       - uses: actions/upload-artifact@v4
         with:
-          name: installer-iso
+          name: ${{ env.ISO_NAME }}-installer
           path: output/bootiso/*.iso
           compression-level: 0
           retention-days: 7
