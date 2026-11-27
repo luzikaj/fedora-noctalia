@@ -1,0 +1,13 @@
+# Distribution defaults for Noctalia (loaded before ~/.config/noctalia/ and
+# the Settings UI, so anything you set yourself wins).
+
+[theme]
+mode = "dark"
+
+[wallpaper]
+enabled = true
+fill_mode = "crop"
+fill_color = "#0b0d1f"
+
+[wallpaper.default]
+path = "/usr/share/backgrounds/fedora-noctalia/noctalia-night-3840x2160.jpg"

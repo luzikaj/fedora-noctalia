@@ -21,10 +21,14 @@ command = "$(command -v noctalia-greeter-session)"
 user = "${greeter_user}"
 EOF
 
-if [[ $greeter_user != greeter ]]; then
-    echo "d /var/lib/noctalia-greeter 0750 ${greeter_user} ${greeter_group} -" \
-        > /usr/lib/tmpfiles.d/noctalia-greeter-local.conf
-fi
+{
+    if [[ $greeter_user != greeter ]]; then
+        echo "d /var/lib/noctalia-greeter 0750 ${greeter_user} ${greeter_group} -"
+    fi
+    # Seed the greeter config (wallpaper, default session) once; never overwrite.
+    echo "C /var/lib/noctalia-greeter/greeter.toml - - - - /usr/share/fedora-noctalia/greeter.toml"
+    echo "z /var/lib/noctalia-greeter/greeter.toml 0644 ${greeter_user} ${greeter_group} -"
+} > /usr/lib/tmpfiles.d/noctalia-greeter-local.conf
 
 systemctl enable greetd.service
 systemctl enable noctalia-greeter-setup.service
@@ -45,6 +49,8 @@ systemctl enable bootc-stage-update.timer
 # --- sanity checks -----------------------------------------------------------
 # Fail the build on a broken Umbriel config instead of at first login.
 XDG_CONFIG_HOME=/nonexistent XDG_CONFIG_DIRS=/etc/xdg umbriel config validate
+noctalia config validate /etc/xdg/noctalia/10-fedora-noctalia.toml
+test -r /usr/share/backgrounds/fedora-noctalia/noctalia-night-3840x2160.jpg
 
 for bin in umbriel start-umbriel noctalia noctalia-greeter-session; do
     command -v "$bin" >/dev/null || { echo "missing binary: $bin"; exit 1; }

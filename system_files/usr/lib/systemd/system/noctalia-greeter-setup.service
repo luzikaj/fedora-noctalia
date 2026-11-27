@@ -1,6 +1,6 @@
 [Unit]
 Description=Initialize Noctalia greeter state on first boot
-ConditionPathExists=!/var/lib/noctalia-greeter/greeter.toml
+ConditionPathExists=!/var/lib/noctalia-greeter/sync.toml
 After=systemd-tmpfiles-setup.service
 Before=greetd.service
 

@@ -1,0 +1,12 @@
+# Template copied to /var/lib/noctalia-greeter/greeter.toml on first boot
+# (tmpfiles "C": only when that file does not exist yet).
+
+[session]
+default = "Umbriel"
+
+[appearance.wallpaper]
+path = "/usr/share/backgrounds/fedora-noctalia/noctalia-night-3840x2160.jpg"
+fill_mode = "crop"
+fill_color = "#0b0d1f"
+blur = 0.35
+tint = 0.25
