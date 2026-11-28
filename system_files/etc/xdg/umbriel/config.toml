@@ -113,14 +113,11 @@ default_extent_fraction = 0.5
 "Mod+A" = { action = "spawn flatpak run net.mkiol.SpeechNote --action start-reading-clipboard", repeat = false }
 "Mod+X" = { action = "spawn flatpak run net.mkiol.SpeechNote --action cancel", repeat = false }
 
-# ---- screenshots & emergency
-"Print" = { action = "spawn noctalia msg screenshot-region", repeat = false }
-"Ctrl+Print" = { action = "spawn noctalia msg screenshot-fullscreen", repeat = false }
-"Mod+Print" = { action = "spawn noctalia msg screenshot-window", repeat = false }
+# ---- screenshots & emergency (G413 TKL: no PrtSc / Scroll Lock keys)
 "Mod+F9" = { action = "spawn noctalia msg screenshot-window", repeat = false }
 "Mod+F10" = { action = "spawn noctalia msg screenshot-region", repeat = false }
 "Mod+F12" = { action = "spawn noctalia msg screenshot-fullscreen", repeat = false }
-"Mod+Scroll_Lock" = { action = "shortcuts-inhibit-toggle", allow_when_inhibited = true, repeat = false }
+"Mod+F7" = { action = "shortcuts-inhibit-toggle", allow_when_inhibited = true, repeat = false }
 
 # ---- mouse wheel, for the times you do grab the mouse
 "Mod+WheelDown" = { action = "workspace-next", cooldown_ms = 150 }

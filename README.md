@@ -55,7 +55,7 @@ Edit the repo and push. CI also rebuilds weekly.
 
 ## Keyboard & keybinds (one-handed, right hand)
 
-Built for a Logitech G413 TKL (no numpad; dedicated PrtSc/ScrLk/Pause; Fn right of Alt Gr).
+Built for a Logitech G413 TKL (no numpad, no PrtSc / Scroll Lock keys; Fn right of Alt Gr).
 Same setup as [fedora-gnc](https://github.com/luzikaj/fedora-gnc) (see its `docs/keyboard.md`):
 
 | Where | Layout |
@@ -82,9 +82,9 @@ Keys are named by what they type on Dvorak-R (QWERTY keycap in brackets):
 | [ ] / Backspace | notifications (control center) / clipboard / close |
 | arrows | volume + / − / mute / play-pause (F11: audio devices) |
 | Ins Del PgUp PgDn Home End | shortcuts / lock / last workspace / settings / other monitor / send there |
-| F8 F9 F10 F12, Print | power menu, screenshots (window / area / screen), Print = area without Mod |
+| F8 F9 F10 F12 | power menu, screenshots (window / area / screen) |
 | c i a x | Speech Note: dictate / stop / read clipboard / cancel |
-| Scroll Lock | pass keys to the focused app (games, VMs) and back |
+| F7 | pass keys to the focused app (games, VMs) and back |
 
 The default desktop wallpaper is a cheat sheet of this keyboard
 (`artwork/make-cheatsheet.py`; after changing binds, edit it and run

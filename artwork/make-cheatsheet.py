@@ -20,7 +20,7 @@ W, H = 3840, 2160
 OUT = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
 
 # ---------------------------------------------------------------- content ---
-# Physical keyboard (Logitech G413 TKL: Fn right of Alt Gr), each key labelled with what it types on dvorak_r_pl
+# Physical keyboard (Logitech G413 TKL: Fn right of Alt Gr, no PrtSc/ScrLk), each key labelled with what it types on dvorak_r_pl
 # (right-handed Dvorak). Keep in sync with system_files/etc/xdg/umbriel/config.toml.
 # key = (label, Mod-action or "", width in units, group)
 _ = ""
@@ -45,9 +45,8 @@ MAIN = [
      ("Alt Gr", "hold: Mod", 1.25, "keyd"), ("Fn", _, 1.25, _), ("Menu", _, 1.25, _),
      ("Ctrl", "tap: sticky", 1.25, "keyd")],
 ]
-FROW = [("F8", "power", "app"), ("F9", "shot win", "shot"), ("F10", "shot area", "shot"),
+FROW = [("F7", "keys→app", "app"), ("F8", "power", "app"), ("F9", "shot win", "shot"), ("F10", "shot area", "shot"),
         ("F11", "audio", "sound"), ("F12", "shot screen", "shot")]
-NAV_TOP = [("PrtSc", "area shot*", "shot"), ("ScrLk", "keys→app", "app"), ("Pause", _, _)]
 NAV = [
     [("Ins", "shortcuts", "app"), ("Home", "other mon", "ws"), ("PgUp", "last WS", "ws")],
     [("Del", "lock", "app"), ("End", "send→mon", "ws"), ("PgDn", "settings", "app")],
@@ -62,7 +61,7 @@ TIPS = [
     ("Polish", "tap Right Alt, then a c e l n o s z x  →  ą ć ę ł ń ó ś ż ź"),
     ("Sticky", "tap Right Ctrl / Right Shift, then the key (1 s)"),
     ("Rescue", "Backspace + Escape + Enter together stops keyd"),
-    ("*", "PrtSc works without Mod"),
+    ("Games", "Mod+F7 passes all keys to a game / VM, again to undo"),
 ]
 SYSTEM = [
     ("sudo bootc upgrade", "update (applies on reboot)"),
@@ -117,7 +116,7 @@ def build_svg():
 
     kx0 = PX + 70
     fy = PY + 150                       # F-row
-    frow_x = kx0 + 9 * U                # F8 sits roughly above "f"
+    frow_x = kx0 + 8 * U                # F7..F12 above the right hand
     for i, (lab, act, grp) in enumerate(FROW):
         p.append(key(frow_x + i * U, fy, U - GAP, lab, act, grp, h=120))
     ky0 = fy + 120 + 40                  # main block
@@ -128,8 +127,6 @@ def build_svg():
             p.append(key(x, y, w * U - GAP, lab, act, grp))
             x += w * U
     nx0 = kx0 + 15 * U + 70             # nav cluster
-    for c, (lab, act, grp) in enumerate(NAV_TOP):
-        p.append(key(nx0 + c * U, fy, U - GAP, lab, act, grp, h=120))
     for r, row in enumerate(NAV):
         for c, (lab, act, grp) in enumerate(row):
             p.append(key(nx0 + c * U, ky0 + r * (KH + GAP), U - GAP, lab, act, grp))
