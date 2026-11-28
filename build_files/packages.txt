@@ -39,6 +39,7 @@ pavucontrol
 kbd
 libxkbcommon-utils
 git
+jq
 wl-clipboard
 brightnessctl
 playerctl

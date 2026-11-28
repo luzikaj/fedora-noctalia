@@ -26,4 +26,21 @@ if ((${#optional[@]})); then
     done
 fi
 
+# Fresh editor: no Fedora/COPR/Terra package; install the latest GitHub release
+# RPM, checksum-verified (same as fedora-gnc's fedora-setup.sh).
+if ! rpm -q fresh-editor >/dev/null 2>&1 && ! command -v fresh >/dev/null; then
+    tmp=$(mktemp -d)
+    rel=$(curl -fsSL https://api.github.com/repos/sinelaw/fresh/releases/latest) || rel=""
+    url=$(jq -r '.assets[].browser_download_url' <<<"$rel" 2>/dev/null | grep -E "\.$(uname -m)\.rpm$" | head -n1 || true)
+    if [[ -n $url ]] \
+        && curl -fsSL -o "$tmp/fresh.rpm" "$url" \
+        && curl -fsSL -o "$tmp/fresh.rpm.sha256" "$url.sha256" \
+        && [[ $(sha256sum "$tmp/fresh.rpm" | cut -d' ' -f1) == $(cut -d' ' -f1 "$tmp/fresh.rpm.sha256") ]]; then
+        dnf -y install "$tmp/fresh.rpm"
+    else
+        echo "::warning::Fresh editor: could not download/verify the release RPM"
+    fi
+    rm -rf "$tmp"
+fi
+
 dnf clean all
