@@ -2,12 +2,12 @@
 # A user's ~/.config/umbriel/config.toml replaces this file entirely; copy it
 # there to customise. Validate with: umbriel config validate
 #
-# Keybind design: one-handed, right hand, Dvorak.
+# Keybinds: the same one-handed layout as the fedora-gnc niri setup.
+#   * Layout dvorak_r_pl (right-handed Dvorak + Polish letters on AltGr).
+#   * Mod = hold Right Alt (keyd turns it into Super); Mod + one key, never Shift.
+#   * Keys are named by what they type on dvorak_r_pl; [brackets] = QWERTY keycap.
 # The desktop wallpaper is a cheat sheet of these binds: after changing them,
 # update artwork/make-cheatsheet.py and re-run it.
-#   * Mod + exactly one key, never Shift.
-#   * Keys are named by the symbol they type on Dvorak (bindings match keysyms).
-#   * Mod is Super; keyd turns held Right Alt into Super (see /etc/keyd/).
 
 [general]
 autostart = ["noctalia"]
@@ -17,9 +17,9 @@ show_cheatsheet = false
 [environment]
 ELECTRON_OZONE_PLATFORM_HINT = "auto"
 
-# Keyboard layout comes from `localectl set-x11-keymap` (set by the installer)
-# because no layout/variant/options keys are set here.
+# Right-handed Dvorak with Polish letters (/etc/xkb/symbols/dvorak_r_pl).
 [input.keyboard]
+layout = "dvorak_r_pl"
 numlock_toggle = true
 repeat_rate = 30
 repeat_delay = 300
@@ -50,82 +50,83 @@ default_extent_fraction = 0.5
 
 # ------------------------------------------------------------------------------
 # Keybinds. Defining this table replaces Umbriel's built-in set.
-# Physical QWERTY position in brackets.
 [keybinds]
-# Launcher: tap Mod alone, or Mod+Space if keyd does not pass a lone tap
-"Mod" = "spawn noctalia msg panel-toggle launcher"
-"Mod+Space" = { action = "spawn noctalia msg panel-toggle launcher", repeat = false }
+# ---- home row: focus & basics. e h t d = left / down / up / right [G H J K]
+"Mod+E" = "window-focus-left"
+"Mod+H" = "window-focus-or-workspace-down"
+"Mod+T" = "window-focus-or-workspace-up"
+"Mod+D" = "window-focus-right"
+"Mod+K" = { action = "window-toggle-floating", repeat = false }            # [;]
+"Mod+J" = { action = "window-focus-switch-floating", repeat = false }      # [5]
+"Mod+Minus" = { action = "overview-toggle", repeat = false }               # [']
 "Mod+Return" = { action = "spawn spin-terminal", repeat = false }
 "Mod+BackSpace" = { action = "window-close", repeat = false }
 
-# Focus: home row  D H T N  [h j k l]
-"Mod+D" = "window-focus-left"
-"Mod+H" = "window-focus-down"
-"Mod+T" = "window-focus-up"
-"Mod+N" = "window-focus-right"
+# ---- top row: move windows. o r s u sit right above e h t d [T Y U I]
+"Mod+O" = "column-move-left"
+"Mod+R" = "window-move-or-workspace-down"
+"Mod+S" = "window-move-or-workspace-up"
+"Mod+U" = "column-move-right"
+"Mod+Y" = { action = "window-toggle-fullscreen", repeat = false }          # [O]
+"Mod+B" = { action = "window-toggle-maximize", repeat = false }            # [P]
+"Mod+Semicolon" = "window-consume-or-expel-left"                           # [[]
+"Mod+Equal" = "window-consume-or-expel-right"                              # []]
+"Mod+Backslash" = { action = "window-toggle-fullscreen", repeat = false }
 
-# Move: row above  F G C R  [y u i o]
-"Mod+F" = "column-move-left"
-"Mod+G" = "window-move-down"
-"Mod+C" = "window-move-up"
-"Mod+R" = "column-move-right"
+# ---- bottom row: workspaces [B N M , . /]
+"Mod+N" = "workspace-previous"
+"Mod+W" = "workspace-next"
+"Mod+V" = "column-move-to-workspace-previous"
+"Mod+G" = "column-move-to-workspace-next"
+"Mod+Apostrophe" = { action = "spawn noctalia msg panel-toggle launcher", repeat = false }   # [/]
+"Mod+Period" = { action = "spawn noctalia msg window-switcher", repeat = false }             # [R]
 
-# Arrows mirror focus
-"Mod+Left" = "window-focus-left"
-"Mod+Down" = "window-focus-down"
-"Mod+Up" = "window-focus-up"
-"Mod+Right" = "window-focus-right"
+# ---- number row: size & panels [6 7 8 9 0 - =]
+"Mod+L" = "window-cycle-primary-extent"
+"Mod+M" = "window-modify-primary-extent -0.10"
+"Mod+F" = "window-modify-primary-extent +0.10"
+"Mod+P" = "column-center"
+"Mod+Slash" = { action = "column-toggle-tabbed", repeat = false }
+"Mod+BracketLeft" = { action = "spawn noctalia msg panel-toggle control-center", repeat = false }
+"Mod+BracketRight" = { action = "spawn noctalia msg panel-toggle clipboard", repeat = false }
 
-# Overview, window state
-"Mod+S" = { action = "overview-toggle", repeat = false }                    # [;]
-"Mod+L" = { action = "window-toggle-fullscreen", repeat = false }           # [p]
-"Mod+M" = { action = "window-toggle-maximize-to-edges", repeat = false }    # [m]
-"Mod+Z" = { action = "window-toggle-floating", repeat = false }             # [/]
-"Mod+W" = "window-consume-left"                                             # [,]
-"Mod+V" = "window-consume-right"                                            # [.]
+# ---- arrows: sound (focus already lives on e h t d)
+"Mod+Up" = { action = "spawn noctalia msg volume-up", allow_when_locked = true }
+"Mod+Down" = { action = "spawn noctalia msg volume-down", allow_when_locked = true }
+"Mod+Left" = { action = "spawn noctalia msg volume-mute", allow_when_locked = true, repeat = false }
+"Mod+Right" = { action = "spawn noctalia msg media toggle", allow_when_locked = true, repeat = false }
+"Mod+F11" = { action = "spawn pavucontrol", repeat = false }
 
-# Width
-"Mod+Slash" = "window-cycle-primary-extent"                                 # [[]
-"Mod+Minus" = "window-modify-primary-extent -0.05"                          # [']
-"Mod+Equal" = "window-modify-primary-extent +0.05"                          # []]
+# ---- nav cluster: less frequent
+"Mod+Insert" = { action = "cheatsheet-toggle", repeat = false }
+"Mod+Delete" = { action = "spawn noctalia msg session lock", repeat = false }
+"Mod+Page_Up" = { action = "workspace-focus-last", repeat = false }
+"Mod+Page_Down" = { action = "spawn noctalia msg settings-toggle", repeat = false }
+"Mod+Home" = { action = "output-focus-next", repeat = false }
+"Mod+End" = { action = "window-move-to-output-next", repeat = false }
+"Mod+Z" = { action = "workspace-move-to-output-next", repeat = false }      # [D]
+"Mod+F8" = { action = "spawn noctalia msg panel-toggle session", repeat = false }
 
-# Tabs
-"Mod+BracketLeft" = { action = "column-toggle-tabbed", repeat = false }     # [-]
-"Mod+BracketRight" = "column-focus-tab-next"                                # [=]
+# ---- voice: Speech Note (Flatpak net.mkiol.SpeechNote)
+"Mod+C" = { action = "spawn flatpak run net.mkiol.SpeechNote --action start-listening-active-window", repeat = false }
+"Mod+I" = { action = "spawn flatpak run net.mkiol.SpeechNote --action stop-listening", repeat = false }
+"Mod+A" = { action = "spawn flatpak run net.mkiol.SpeechNote --action start-reading-clipboard", repeat = false }
+"Mod+X" = { action = "spawn flatpak run net.mkiol.SpeechNote --action cancel", repeat = false }
 
-# Workspaces 1-5 on the right-hand digits
-"Mod+6" = "workspace-switch 1"
-"Mod+7" = "workspace-switch 2"
-"Mod+8" = "workspace-switch 3"
-"Mod+9" = "workspace-switch 4"
-"Mod+0" = "workspace-switch 5"
-"Mod+Page_Up" = "workspace-previous"
-"Mod+Page_Down" = "workspace-next"
-
-# Send window to workspace without Shift: Mod+B [n], then 6..0
-"Mod+B" = { action = "submap send", repeat = false }
-"submap[send],6" = { action = "window-move-to-workspace 1", submap = "reset" }
-"submap[send],7" = { action = "window-move-to-workspace 2", submap = "reset" }
-"submap[send],8" = { action = "window-move-to-workspace 3", submap = "reset" }
-"submap[send],9" = { action = "window-move-to-workspace 4", submap = "reset" }
-"submap[send],0" = { action = "window-move-to-workspace 5", submap = "reset" }
-"submap[send],Page_Up" = { action = "window-move-to-workspace-previous", submap = "reset" }
-"submap[send],Page_Down" = { action = "window-move-to-workspace-next", submap = "reset" }
-"submap[send],Escape" = "submap reset"
-"submap[send],BackSpace" = "submap reset"
-
-# Noctalia panels on the editing block (right of Enter)
-"Mod+Insert" = "spawn noctalia msg panel-toggle clipboard"
-"Mod+Home" = "spawn noctalia msg panel-toggle control-center"
-"Mod+End" = "spawn noctalia msg settings-toggle"
-"Mod+Delete" = "spawn noctalia msg panel-toggle session"
-"Mod+Backslash" = "cheatsheet-toggle"
+# ---- screenshots & emergency
 "Print" = { action = "spawn noctalia msg screenshot-region", repeat = false }
+"Ctrl+Print" = { action = "spawn noctalia msg screenshot-fullscreen", repeat = false }
+"Mod+Print" = { action = "spawn noctalia msg screenshot-window", repeat = false }
+"Mod+F9" = { action = "spawn noctalia msg screenshot-window", repeat = false }
+"Mod+F10" = { action = "spawn noctalia msg screenshot-region", repeat = false }
+"Mod+F12" = { action = "spawn noctalia msg screenshot-fullscreen", repeat = false }
+"Mod+Scroll_Lock" = { action = "shortcuts-inhibit-toggle", allow_when_inhibited = true, repeat = false }
 
-# Pass all keys to a game/VM; press again to get them back
-"Mod+Pause" = { action = "shortcuts-inhibit-toggle", allow_when_inhibited = true, repeat = false }
+# ---- mouse wheel, for the times you do grab the mouse
+"Mod+WheelDown" = { action = "workspace-next", cooldown_ms = 150 }
+"Mod+WheelUp" = { action = "workspace-previous", cooldown_ms = 150 }
 
-# Media and brightness keys via Noctalia (shows OSD, works when locked)
+# ---- media / volume / brightness keys (with Noctalia OSD)
 "XF86AudioRaiseVolume" = { action = "spawn noctalia msg volume-up", allow_when_locked = true }
 "XF86AudioLowerVolume" = { action = "spawn noctalia msg volume-down", allow_when_locked = true }
 "XF86AudioMute" = { action = "spawn noctalia msg volume-mute", allow_when_locked = true, repeat = false }

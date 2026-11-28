@@ -1,0 +1,93 @@
+# Helix for One-Handed Fedora Remix: right-handed Dvorak, the same keys as
+# LazyVim, Zed (Helix mode), lfk and yazi. Start it with `hx`.
+#
+# Keys are written as the characters the right-handed Dvorak layout types.
+# The hand rests on e h t d (QWERTY keycaps [G] [H] [J] [K]):
+#
+#        e  <- left        h  down        t  up        d  -> right
+#
+# The Helix commands those keys had move to the keys h j k l freed:
+#
+#        k = delete selection   (was d)     j = till character (was t)
+#        l = end of word        (was e)     L = end of WORD    (was E)
+#        D = delete without copying         (was Alt+d, hard with one hand)
+#
+#   Insert mode:  Ctrl+t = back to normal mode (tap Right Ctrl, then t)
+#   View mode:    z h / z t scroll a line, z H / z T half a page, z u cursor to the top
+#   Splits:       Space w (or Ctrl+w) + e h t d to move, Shift + the same to swap
+#
+# Everything else keeps Helix's defaults (Space f file picker, x select line,
+# w / b words, u undo, y / p copy and paste, : commands). Goto mode keeps
+# g e (last line), g t (top of screen), g d (definition), g h / g l (line
+# start / end). Your own settings (theme, editor options) can go above or below
+# the [keys.*] tables; :config-reload applies changes.
+
+[keys.normal]
+e = "move_char_left"
+h = "move_visual_line_down"
+t = "move_visual_line_up"
+d = "move_char_right"
+
+k = "delete_selection"
+D = "delete_selection_noyank"
+j = "find_till_char"
+l = "move_next_word_end"
+L = "move_next_long_word_end"
+
+[keys.select]
+e = "extend_char_left"
+h = "extend_visual_line_down"
+t = "extend_visual_line_up"
+d = "extend_char_right"
+
+k = "delete_selection"
+D = "delete_selection_noyank"
+j = "extend_till_char"
+l = "extend_next_word_end"
+L = "extend_next_long_word_end"
+
+[keys.insert]
+"C-t" = "normal_mode"
+
+# View mode: z (or sticky Z). t was "cursor line to top"; that moves to u.
+[keys.normal.z]
+h = "scroll_down"
+t = "scroll_up"
+H = "page_cursor_half_down"
+T = "page_cursor_half_up"
+u = "align_view_top"
+
+[keys.normal.Z]
+h = "scroll_down"
+t = "scroll_up"
+H = "page_cursor_half_down"
+T = "page_cursor_half_up"
+u = "align_view_top"
+
+[keys.select.z]
+h = "scroll_down"
+t = "scroll_up"
+H = "page_cursor_half_down"
+T = "page_cursor_half_up"
+u = "align_view_top"
+
+# Splits: Space w (no Ctrl needed) or Ctrl+w
+[keys.normal.space.w]
+e = "jump_view_left"
+h = "jump_view_down"
+t = "jump_view_up"
+d = "jump_view_right"
+E = "swap_view_left"
+H = "swap_view_down"
+T = "swap_view_up"
+D = "swap_view_right"
+
+[keys.normal."C-w"]
+e = "jump_view_left"
+h = "jump_view_down"
+t = "jump_view_up"
+d = "jump_view_right"
+E = "swap_view_left"
+H = "swap_view_down"
+T = "swap_view_up"
+D = "swap_view_right"

@@ -1,0 +1,22 @@
+// Right-handed Dvorak with Polish letters on Right Alt (AltGr).
+// Install: ~/.config/xkb/symbols/dvorak_r_pl
+//   AltGr + a c e l n o s z x  ->  ą ć ę ł ń ó ś ż ź   (Shift for capitals)
+//   Menu key acts as Super.
+default partial alphanumeric_keys
+xkb_symbols "basic" {
+    include "us(dvorak-r)"
+    name[Group1] = "Polish (Dvorak, right-handed)";
+
+    key <AC04> { type[Group1] = "FOUR_LEVEL_ALPHABETIC", [ a, A, aogonek,     Aogonek     ] };
+    key <AC09> { type[Group1] = "FOUR_LEVEL_ALPHABETIC", [ c, C, cacute,      Cacute      ] };
+    key <AC05> { type[Group1] = "FOUR_LEVEL_ALPHABETIC", [ e, E, eogonek,     Eogonek     ] };
+    key <AE06> { type[Group1] = "FOUR_LEVEL_ALPHABETIC", [ l, L, lstroke,     Lstroke     ] };
+    key <AB06> { type[Group1] = "FOUR_LEVEL_ALPHABETIC", [ n, N, nacute,      Nacute      ] };
+    key <AD05> { type[Group1] = "FOUR_LEVEL_ALPHABETIC", [ o, O, oacute,      Oacute      ] };
+    key <AD07> { type[Group1] = "FOUR_LEVEL_ALPHABETIC", [ s, S, sacute,      Sacute      ] };
+    key <AC03> { type[Group1] = "FOUR_LEVEL_ALPHABETIC", [ z, Z, zabovedot,   Zabovedot   ] };
+    key <AB03> { type[Group1] = "FOUR_LEVEL_ALPHABETIC", [ x, X, zacute,      Zacute      ] };
+
+    include "level3(ralt_switch)"
+    include "altwin(menu_win)"
+};

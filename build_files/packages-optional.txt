@@ -3,7 +3,6 @@
 # know which repo provides it.
 
 ghostty
-keyd
 k9s
 fresh-editor
 xdg-desktop-portal-umbriel

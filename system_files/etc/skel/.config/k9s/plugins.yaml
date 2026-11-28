@@ -1,0 +1,64 @@
+# K9s plugins – prawa ręka, Dvorak One-Handed Right (dvorak-r)
+# Zastępują akcje wbudowane, których klawisze w dvorak-r leżą po lewej:
+#   d (describe), y (yaml), Ctrl-d (delete), Ctrl-k (kill).
+# Wynik otwiera się w less – wyjście: ZZ (Shift + klawisz "z", prawa strona).
+plugins:
+  describe-r:
+    shortCut: Shift-H
+    description: Describe (prawa ręka)
+    scopes:
+      - all
+    command: sh
+    background: false
+    args:
+      - -c
+      - kubectl describe "$RESOURCE_NAME" "$NAME" -n "$NAMESPACE" --context "$CONTEXT" | less
+
+  yaml-r:
+    shortCut: Shift-E
+    description: YAML (prawa ręka)
+    scopes:
+      - all
+    command: sh
+    background: false
+    args:
+      - -c
+      - kubectl get "$RESOURCE_NAME" "$NAME" -n "$NAMESPACE" --context "$CONTEXT" -o yaml | less
+
+  delete-r:
+    shortCut: Shift-U
+    description: Usuń (prawa ręka)
+    confirm: true
+    dangerous: true
+    scopes:
+      - all
+    command: kubectl
+    background: true
+    args:
+      - delete
+      - $RESOURCE_NAME
+      - $NAME
+      - -n
+      - $NAMESPACE
+      - --context
+      - $CONTEXT
+
+  kill-r:
+    shortCut: Shift-W
+    description: Kill poda – force (prawa ręka)
+    confirm: true
+    dangerous: true
+    scopes:
+      - pods
+    command: kubectl
+    background: true
+    args:
+      - delete
+      - pod
+      - $NAME
+      - -n
+      - $NAMESPACE
+      - --context
+      - $CONTEXT
+      - --grace-period=0
+      - --force

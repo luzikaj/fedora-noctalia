@@ -20,139 +20,157 @@ W, H = 3840, 2160
 OUT = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
 
 # ---------------------------------------------------------------- content ---
-# Right half of the keyboard, labelled with the Dvorak symbol each key types.
-# (label, action, width in key units, accent group)
-ROWS = [
-    (0.0, [("6", "WS 1", 1, "ws"), ("7", "WS 2", 1, "ws"), ("8", "WS 3", 1, "ws"),
-           ("9", "WS 4", 1, "ws"), ("0", "WS 5", 1, "ws"), ("[", "tabs", 1, "win"),
-           ("]", "next tab", 1, "win"), ("⌫", "close", 1.6, "app")]),
-    (0.5, [("F", "col ←", 1, "move"), ("G", "win ↓", 1, "move"), ("C", "win ↑", 1, "move"),
-           ("R", "col →", 1, "move"), ("L", "fullscreen", 1, "win"), ("/", "width", 1, "size"),
-           ("=", "wider", 1, "size"), ("\\", "this sheet", 1.1, "app")]),
-    (0.75, [("D", "focus ←", 1, "focus"), ("H", "focus ↓", 1, "focus"), ("T", "focus ↑", 1, "focus"),
-            ("N", "focus →", 1, "focus"), ("S", "overview", 1, "app"), ("-", "narrower", 1, "size"),
-            ("⏎", "terminal", 1.85, "app")]),
-    (1.25, [("B", "send →", 1, "ws"), ("M", "maximize", 1, "win"), ("W", "stack ←", 1, "win"),
-            ("V", "stack →", 1, "win"), ("Z", "float", 1, "win")]),
+# Physical keyboard (TKL), each key labelled with what it types on dvorak_r_pl
+# (right-handed Dvorak). Keep in sync with system_files/etc/xdg/umbriel/config.toml.
+# key = (label, Mod-action or "", width in units, group)
+_ = ""
+MAIN = [
+    [("`", _, 1, _), ("1", _, 1, _), ("2", _, 1, _), ("3", _, 1, _), ("4", _, 1, _),
+     ("j", "float↔tile", 1, "win"), ("l", "width", 1, "win"), ("m", "narrower", 1, "win"),
+     ("f", "wider", 1, "win"), ("p", "center", 1, "win"), ("/", "tabs", 1, "win"),
+     ("[", "notifs", 1, "app"), ("]", "clipboard", 1, "app"), ("⌫", "close", 2, "win")],
+    [("Tab", _, 1.5, _), ("5", _, 1, _), ("6", _, 1, _), ("q", _, 1, _), (".", "windows", 1, "app"),
+     ("o", "col ←", 1, "move"), ("r", "win ↓", 1, "move"), ("s", "win ↑", 1, "move"),
+     ("u", "col →", 1, "move"), ("y", "fullscreen", 1, "win"), ("b", "maximize", 1, "win"),
+     (";", "stack ←", 1, "move"), ("=", "unstack →", 1, "move"), ("\\", "fullscreen", 1.5, "win")],
+    [("Caps", _, 1.75, _), ("7", _, 1, _), ("8", _, 1, _), ("z", "WS → mon", 1, "ws"),
+     ("a", "read aloud", 1, "voice"), ("e", "focus ←", 1, "focus"), ("h", "focus ↓", 1, "focus"),
+     ("t", "focus ↑", 1, "focus"), ("d", "focus →", 1, "focus"), ("c", "dictate", 1, "voice"),
+     ("k", "floating", 1, "win"), ("-", "overview", 1, "app"), ("⏎", "terminal", 2.25, "app")],
+    [("Shift", _, 2.25, _), ("9", _, 1, _), ("0", _, 1, _), ("x", "stop voice", 1, "voice"),
+     (",", _, 1, _), ("i", "stop dict.", 1, "voice"), ("n", "WS ↑", 1, "ws"), ("w", "WS ↓", 1, "ws"),
+     ("v", "send ↑", 1, "ws"), ("g", "send ↓", 1, "ws"), ("'", "launcher", 1, "app"),
+     ("Shift", "tap: sticky", 2.75, "keyd")],
+    [("Ctrl", _, 1.25, _), ("Win", _, 1.25, _), ("Alt", _, 1.25, _), ("Space", _, 6.25, _),
+     ("Alt Gr", "hold: Mod", 1.25, "keyd"), ("Menu", _, 1.25, _), ("Ctrl", "tap: sticky", 2.5, "keyd")],
 ]
-EDIT = [  # editing block 2x3
-    [("Ins", "clipboard", "app"), ("Home", "control", "app"), ("PgUp", "WS prev", "ws")],
-    [("Del", "power", "app"), ("End", "settings", "app"), ("PgDn", "WS next", "ws")],
+FROW = [("F8", "power", "app"), ("F9", "shot win", "shot"), ("F10", "shot area", "shot"),
+        ("F11", "audio", "sound"), ("F12", "shot screen", "shot")]
+NAV_TOP = [("PrtSc", "area shot*", "shot"), ("ScrLk", "keys→app", "app"), ("Pause", _, _)]
+NAV = [
+    [("Ins", "shortcuts", "app"), ("Home", "other mon", "ws"), ("PgUp", "last WS", "ws")],
+    [("Del", "lock", "app"), ("End", "send→mon", "ws"), ("PgDn", "settings", "app")],
 ]
-EXTRAS = [
-    ("Mod", "tap: launcher"),
-    ("Mod  Space", "launcher"),
-    ("Mod  B  then 6…0", "send window to WS 1…5"),
-    ("Mod  B  then PgUp/PgDn", "send to prev/next WS"),
-    ("Print", "region screenshot"),
-    ("Mod  Pause", "keys go to app / back"),
+ARROWS = [("↑", "vol +", "sound"), ("←", "mute", "sound"), ("↓", "vol −", "sound"), ("→", "play", "sound")]
+
+LEGEND = [("focus", "focus"), ("move", "move"), ("ws", "workspaces · monitors"), ("win", "window · size"),
+          ("app", "shell · apps"), ("sound", "sound"), ("voice", "voice"), ("shot", "screenshots"),
+          ("keyd", "keyd modifiers")]
+TIPS = [
+    ("Mod", "hold Right Alt, then one key (never Shift)"),
+    ("Polish", "tap Right Alt, then a c e l n o s z x  →  ą ć ę ł ń ó ś ż ź"),
+    ("Sticky", "tap Right Ctrl / Right Shift, then the key (1 s)"),
+    ("Rescue", "Backspace + Escape + Enter together stops keyd"),
+    ("*", "PrtSc works without Mod"),
 ]
 SYSTEM = [
-    ("sudo bootc upgrade", "fetch update (applies on reboot)"),
+    ("sudo bootc upgrade", "update (applies on reboot)"),
     ("bootc status", "current / staged image"),
     ("sudo bootc rollback", "boot previous image"),
     ("flatpak install flathub <app>", "add GUI apps"),
     ("umbriel config validate", "check compositor config"),
-    ("noctalia config validate", "check shell config"),
 ]
 
 ACCENT = {
-    "focus": "#8fb4ff", "move": "#c39bff", "ws": "#7fe0c4",
-    "win": "#ffb4d8", "size": "#ffd38a", "app": "#e9e4ff",
+    "focus": "#8fb4ff", "move": "#c39bff", "ws": "#7fe0c4", "win": "#ffb4d8",
+    "app": "#e9e4ff", "sound": "#ffd38a", "voice": "#9fe7ff", "shot": "#ffa98a",
+    "keyd": "#b8f28a",
 }
 FONT = "Inter"
 MONO = "DejaVu Sans Mono"
 
 # ---------------------------------------------------------------- layout ----
-U = 168          # key unit (px at 4K)
-GAP = 14
-KH = 150         # key height
-PX, PY = 1400, 470          # panel origin
-PW, PH = 2330, 1520
+U = 160          # key unit (px at 4K)
+GAP = 12
+KH = 140         # key height
+PX, PY = 260, 360            # panel origin
+PW, PH = 3060, 1440
 
 
-def key(x, y, w, label, action, group):
+def key(x, y, w, label, action, group, h=KH):
+    if not group:   # unbound key: dim
+        return (f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="18" fill="#14122b" fill-opacity="0.55" '
+                f'stroke="#6d63a0" stroke-opacity="0.25" stroke-width="2"/>'
+                f'<text x="{x + 18}" y="{y + 58}" font-family="{FONT}" font-weight="600" '
+                f'font-size="{48 if len(label) == 1 else 28}" fill="#7a71a8">{escape(label)}</text>')
     col = ACCENT[group]
-    big = 64 if len(label) <= 2 else 40
+    big = 56 if len(label) == 1 else 32
     return f'''
   <g>
-    <rect x="{x}" y="{y}" width="{w}" height="{KH}" rx="22" fill="#1b1838" fill-opacity="0.78"
-          stroke="{col}" stroke-opacity="0.45" stroke-width="2.5"/>
-    <rect x="{x + 18}" y="{y + KH - 14}" width="{w - 36}" height="4" rx="2" fill="{col}" fill-opacity="0.75"/>
-    <text x="{x + 22}" y="{y + 70}" font-family="{FONT}" font-weight="700" font-size="{big}" fill="#f3f0ff">{escape(label)}</text>
-    <text x="{x + 22}" y="{y + 118}" font-family="{FONT}" font-weight="500" font-size="27" fill="{col}">{escape(action)}</text>
+    <rect x="{x}" y="{y}" width="{w}" height="{h}" rx="18" fill="#1b1838" fill-opacity="0.85"
+          stroke="{col}" stroke-opacity="0.55" stroke-width="2.5"/>
+    <rect x="{x + 16}" y="{y + h - 13}" width="{w - 32}" height="4" rx="2" fill="{col}" fill-opacity="0.8"/>
+    <text x="{x + 18}" y="{y + 60}" font-family="{FONT}" font-weight="700" font-size="{big}" fill="#f6f3ff">{escape(label)}</text>
+    <text x="{x + 18}" y="{y + h - 32}" font-family="{FONT}" font-weight="500" font-size="23" fill="{col}">{escape(action)}</text>
   </g>'''
 
 
 def build_svg():
-    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}">']
-    # panel
-    parts.append(f'<rect x="{PX}" y="{PY}" width="{PW}" height="{PH}" rx="48" fill="#0d0b20" '
-                 f'fill-opacity="0.62" stroke="#a796f0" stroke-opacity="0.22" stroke-width="2"/>')
-    parts.append(f'<text x="{PX + 70}" y="{PY + 110}" font-family="{FONT}" font-weight="700" '
-                 f'font-size="58" fill="#f3f0ff">Mod = hold Right Alt</text>')
-    parts.append(f'<text x="{PX + 760}" y="{PY + 110}" font-family="{FONT}" font-weight="400" '
-                 f'font-size="36" fill="#b8addf">+ one key · keys show their Dvorak letter</text>')
+    p = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}">']
+    p.append(f'<rect x="{PX}" y="{PY}" width="{PW}" height="{PH}" rx="48" fill="#0d0b20" '
+             f'fill-opacity="0.66" stroke="#a796f0" stroke-opacity="0.22" stroke-width="2"/>')
+    p.append(f'<text x="{PX + 70}" y="{PY + 100}" font-family="{FONT}" font-weight="700" '
+             f'font-size="56" fill="#f3f0ff">Hold Right Alt + one key</text>')
+    p.append(f'<text x="{PX + 760}" y="{PY + 100}" font-family="{FONT}" font-size="34" '
+             f'fill="#b8addf">keys show what they type on right-handed Dvorak (dvorak_r_pl)</text>')
 
-    # keyboard
-    kx0, ky0 = PX + 70, PY + 170
-    for r, (offset, keys) in enumerate(ROWS):
-        x = kx0 + offset * U
+    kx0 = PX + 70
+    fy = PY + 150                       # F-row
+    frow_x = kx0 + 9 * U                # F8 sits roughly above "f"
+    for i, (lab, act, grp) in enumerate(FROW):
+        p.append(key(frow_x + i * U, fy, U - GAP, lab, act, grp, h=120))
+    ky0 = fy + 120 + 40                  # main block
+    for r, row in enumerate(MAIN):
+        x = kx0
         y = ky0 + r * (KH + GAP)
-        for label, action, w, grp in keys:
-            kw = w * U - GAP
-            parts.append(key(x, y, kw, label, action, grp))
+        for lab, act, w, grp in row:
+            p.append(key(x, y, w * U - GAP, lab, act, grp))
             x += w * U
-    # space bar
-    sy = ky0 + 4 * (KH + GAP)
-    parts.append(key(kx0 + 0.25 * U, sy, 4.6 * U - GAP, "Space", "launcher", "app"))
+    nx0 = kx0 + 15 * U + 70             # nav cluster
+    for c, (lab, act, grp) in enumerate(NAV_TOP):
+        p.append(key(nx0 + c * U, fy, U - GAP, lab, act, grp, h=120))
+    for r, row in enumerate(NAV):
+        for c, (lab, act, grp) in enumerate(row):
+            p.append(key(nx0 + c * U, ky0 + r * (KH + GAP), U - GAP, lab, act, grp))
+    ay = ky0 + 3 * (KH + GAP)
+    up, left, down, right = ARROWS
+    p.append(key(nx0 + U, ay, U - GAP, *up))
+    for c, k in enumerate((left, down, right)):
+        p.append(key(nx0 + c * U, ay + KH + GAP, U - GAP, *k))
 
-    # editing block
-    ex0 = kx0 + 9.15 * U
-    for r, row in enumerate(EDIT):
-        for c, (label, action, grp) in enumerate(row):
-            parts.append(key(ex0 + c * U, ky0 + r * (KH + GAP), U - GAP, label, action, grp))
-
-    # legend
-    lx, ly = ex0, ky0 + 2 * (KH + GAP) + 60
-    for i, (grp, name) in enumerate([("focus", "focus"), ("move", "move"), ("ws", "workspaces"),
-                                     ("win", "window"), ("size", "size"), ("app", "apps & shell")]):
-        yy = ly + i * 52
-        parts.append(f'<rect x="{lx}" y="{yy - 24}" width="34" height="8" rx="4" fill="{ACCENT[grp]}"/>')
-        parts.append(f'<text x="{lx + 54}" y="{yy - 10}" font-family="{FONT}" font-size="30" '
-                     f'fill="#cfc6f2">{escape(name)}</text>')
-
-    # bottom columns
-    by = sy + KH + 110
-
-    def column(x, title, rows, keyw, mono_key):
-        out = [f'<text x="{x}" y="{by}" font-family="{FONT}" font-weight="700" font-size="40" '
-               f'fill="#f3f0ff">{escape(title)}</text>']
-        for i, (k, v) in enumerate(rows):
-            yy = by + 70 + i * 56
-            out.append(f'<text x="{x}" y="{yy}" font-family="{MONO if mono_key else FONT}" '
-                       f'font-weight="{400 if mono_key else 600}" font-size="{30 if mono_key else 32}" '
-                       f'fill="#e9e4ff">{escape(k)}</text>')
-            out.append(f'<text x="{x + keyw}" y="{yy}" font-family="{FONT}" font-size="30" '
-                       f'fill="#a99fd3">{escape(v)}</text>')
-        return out
-
-    parts += column(kx0, "More keys", EXTRAS, 470, False)
-    parts += column(kx0 + 1130, "System", SYSTEM, 590, True)
-    parts.append('</svg>')
-    return "\n".join(parts)
+    # legend under the nav cluster? -> bottom band, three columns
+    by = ky0 + 5 * (KH + GAP) + 80
+    lx = kx0
+    for i, (grp, name) in enumerate(LEGEND):
+        col, row = divmod(i, 5)
+        xx, yy = lx + col * 420, by + row * 50
+        p.append(f'<rect x="{xx}" y="{yy - 22}" width="34" height="8" rx="4" fill="{ACCENT[grp]}"/>')
+        p.append(f'<text x="{xx + 50}" y="{yy - 8}" font-family="{FONT}" font-size="29" fill="#cfc6f2">{escape(name)}</text>')
+    tx = kx0 + 900
+    for i, (k, v) in enumerate(TIPS):
+        yy = by + i * 50
+        p.append(f'<text x="{tx}" y="{yy - 8}" font-family="{FONT}" font-weight="700" font-size="29" fill="#f3f0ff">{escape(k)}</text>')
+        p.append(f'<text x="{tx + 130}" y="{yy - 8}" font-family="{FONT}" font-size="29" fill="#b7aee0">{escape(v)}</text>')
+    sx = kx0 + 2000
+    for i, (k, v) in enumerate(SYSTEM):
+        yy = by + i * 50
+        p.append(f'<text x="{sx}" y="{yy - 8}" font-family="{MONO}" font-size="26" fill="#e9e4ff">{escape(k)}</text>')
+        p.append(f'<text x="{sx + 540}" y="{yy - 8}" font-family="{FONT}" font-size="26" fill="#a99fd3">{escape(v)}</text>')
+    p.append('</svg>')
+    return "\n".join(p)
 
 
 def background(tmp: Path):
     """Night sky with moon and a smaller moth on the left."""
     shapes = Path(__file__).with_name("noctalia-night-shapes.svg").read_text()
     # shrink and move the moth out of the panel's way
+    # small moth in the bottom-right corner, moon top-right, both clear of the panel
     shapes = shapes.replace('translate(1250,1230) rotate(-14) scale(1.15)',
-                            'translate(690,1330) rotate(-14) scale(0.72)')
-    shapes = shapes.replace('M1650,980 C2050,760 2400,690 2700,660', 'M960,1120 C1100,980 1250,880 1380,820')
-    # moon above the panel's top-right corner
-    shapes = shapes.replace('cx="2930" cy="610"', 'cx="3480" cy="245"')
-    shapes = shapes.replace('cx="3000" cy="565"', 'cx="3550" cy="200"')
+                            'translate(3620,1990) rotate(-14) scale(0.2)')
+    shapes = shapes.replace('M1650,980 C2050,760 2400,690 2700,660', 'M0,0')
+    shapes = shapes.replace('cx="2930" cy="610" r="170"', 'cx="3600" cy="190" r="120"')
+    shapes = shapes.replace('cx="3000" cy="565" r="150"', 'cx="3650" cy="158" r="106"')
+    shapes = shapes.replace('cx="2930" cy="610" r="260"', 'cx="3600" cy="190" r="190"')
     svg = tmp / "shapes.svg"
     svg.write_text(shapes)
     png = tmp / "shapes.png"
@@ -166,7 +184,7 @@ def background(tmp: Path):
         d = np.sqrt((x - cx) ** 2 + (y - cy) ** 2) / r
         return (np.exp(-d ** 2) * a)[..., None] * np.array(col, np.float32)
 
-    img += radial(3480, 245, 1100, [70, 45, 130], 0.55)
+    img += radial(3600, 190, 900, [70, 45, 130], 0.55)
     img += radial(700, 1900, 1300, [20, 30, 80], 0.45)
     n = 1400
     for px, py, v in zip(rng.integers(0, W, n), rng.integers(0, H, n), rng.power(6, n) * 200):

@@ -10,3 +10,9 @@ fill_mode = "crop"
 fill_color = "#0b0d1f"
 blur = 0.35
 tint = 0.25
+
+# Same keys as the text console: right-handed Dvorak (no Polish letters, so
+# keep your password to plain characters).
+[keyboard]
+layout = "us"
+variant = "dvorak-r"

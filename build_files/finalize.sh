@@ -32,14 +32,13 @@ EOF
 
 systemctl enable greetd.service
 systemctl enable noctalia-greeter-setup.service
+systemctl enable noctalia-keyboard-firstboot.service
 systemctl set-default graphical.target
 
 # --- other services --------------------------------------------------------
 systemctl enable bluetooth.service
 systemctl enable fwupd-refresh.timer 2>/dev/null || true
-if rpm -q keyd >/dev/null 2>&1; then
-    systemctl enable keyd.service
-fi
+systemctl enable keyd.service
 
 # Updates: stage new images daily, apply on the next reboot you choose.
 # (The stock timer reboots the machine without warning.)
@@ -50,6 +49,12 @@ systemctl enable bootc-stage-update.timer
 # Fail the build on a broken Umbriel config instead of at first login.
 XDG_CONFIG_HOME=/nonexistent XDG_CONFIG_DIRS=/etc/xdg umbriel config validate
 noctalia config validate /etc/xdg/noctalia/10-fedora-noctalia.toml
+# Keyboard: custom layout compiles, console keymap exists
+if command -v xkbcli >/dev/null; then
+    xkbcli compile-keymap --layout dvorak_r_pl >/dev/null
+fi
+find /usr/lib/kbd/keymaps -name 'dvorak-r.map*' | grep -q . || echo "::warning::console keymap dvorak-r not found"
+keyd check /etc/keyd/default.conf 2>/dev/null || true
 test -r /usr/share/backgrounds/fedora-noctalia/noctalia-night-cheatsheet-3840x2160.jpg
 
 for bin in umbriel start-umbriel noctalia noctalia-greeter-session; do

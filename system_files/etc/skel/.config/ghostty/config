@@ -1,0 +1,18 @@
+# Ghostty: one-handed setup (fedora-setup.sh)
+
+# fish as the shell inside Ghostty (your login shell stays bash).
+command = /usr/bin/fish
+
+# Copy and paste WITHOUT Shift.
+#   Ctrl+C copies when text is selected; with nothing selected it still
+#   interrupts the running program, as usual.
+#   Ctrl+V pastes. (In Neovim, block selection is also on Ctrl+Q.)
+keybind = performable:ctrl+c=copy_to_clipboard
+keybind = ctrl+v=paste_from_clipboard
+
+# Selecting text copies it too, so a middle-click pastes it.
+copy-on-select = clipboard
+
+# The compositor draws the window frame.
+window-decoration = false
+confirm-close-surface = false

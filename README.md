@@ -5,8 +5,8 @@ A personal Fedora Atomic (bootc) spin:
 - **Fedora 45** `fedora-bootc` base, updated atomically with `bootc`
 - **Umbriel** compositor (Terra `umbriel-nightly`)
 - **Noctalia** v5 shell (Fedora repos) and **Noctalia Greeter** on greetd (Terra)
-- Helix, Fresh, Ghostty (foot as a fallback), k9s and keyd, plus your own configs in `/etc/skel`
-- One-handed, right-hand Dvorak keybinds: Mod plus one key, never Shift
+- Helix, Fresh, Ghostty (foot as a fallback), k9s and fish, with the one-handed configs from fedora-gnc
+- One-handed: right-handed Dvorak + Polish letters, keyd (Right Alt = Mod, sticky Ctrl/Shift), Mod + one key
 
 ## Layout
 
@@ -53,38 +53,42 @@ sudo bootc rollback         # boot the previous image next time
 
 Edit the repo and push. CI also rebuilds weekly.
 
-## Keybinds (Dvorak letters, QWERTY position in brackets)
+## Keyboard & keybinds (one-handed, right hand)
 
-The default desktop wallpaper is a cheat sheet of these keys
-(`artwork/make-cheatsheet.py`; re-run it after changing binds:
-`python3 artwork/make-cheatsheet.py system_files/usr/share/backgrounds/fedora-noctalia`).
-The plain `noctalia-night-*.jpg` versions are in `/usr/share/backgrounds/fedora-noctalia/`.
+Same setup as [fedora-gnc](https://github.com/luzikaj/fedora-gnc) (see its `docs/keyboard.md`):
+
+| Where | Layout |
+|---|---|
+| Desktop (Umbriel, Noctalia, all apps) | `dvorak_r_pl`: right-handed Dvorak + Polish letters (`/etc/xkb/symbols/dvorak_r_pl`) |
+| Text console, login screen (greeter) | `dvorak-r` (same keys, no Polish letters: keep passwords plain) |
+| keyd (`/etc/keyd/default.conf`) | hold Right Alt = Mod, tap Right Alt + letter = ą ć ę ł ń ó ś ż ź, tap Right Ctrl / Right Shift = sticky |
+
+After the installer, `noctalia-keyboard-firstboot.service` puts Dvorak-R back
+on the console and login screen once (the installer writes its own choice).
+
+Keybinds are the fedora-gnc niri binds ported to Umbriel: Mod + one key, never Shift.
+Keys are named by what they type on Dvorak-R (QWERTY keycap in brackets):
 
 | Keys | Action |
 |---|---|
-| Mod (tap) / Mod+Space | Noctalia launcher |
-| Mod+Return | Terminal |
-| Mod+BackSpace | Close window |
-| Mod+D H T N `[h j k l]` | Focus left / down / up / right |
-| Mod+F G C R `[y u i o]` | Move column left / window down / window up / column right |
-| Mod+S `[;]` | Overview |
-| Mod+L `[p]` | Fullscreen |
-| Mod+M | Maximize to edges |
-| Mod+Z `[/]` | Toggle floating |
-| Mod+W / Mod+V `[, .]` | Consume into column left / right |
-| Mod+/ `[[]` | Cycle width preset |
-| Mod+- / Mod+= `[' ]]` | Narrower / wider |
-| Mod+[ / Mod+] `[- =]` | Toggle tabs / next tab |
-| Mod+6 7 8 9 0 | Workspace 1–5 |
-| Mod+PgUp / PgDn | Previous / next workspace |
-| Mod+B `[n]`, then 6–0 or PgUp/PgDn | Send window to workspace (Esc cancels) |
-| Mod+Insert / Home / End / Delete | Clipboard / control center / settings / session menu |
-| Mod+\ | Keybind cheatsheet |
-| Print | Region screenshot |
-| Mod+Pause | Pass all keys through to the focused app (games, VMs) |
+| e h t d `[G H J K]` | focus ← ↓ ↑ → (↓/↑ continue to the next/previous workspace) |
+| o r s u `[T Y U I]` | move column ← / window ↓ / window ↑ / column → |
+| n w / v g | workspace ↑ ↓ / send column ↑ ↓ |
+| ' `[/]` / . `[R]` / - `[']` / Enter | launcher / window switcher / overview / terminal |
+| l m f p / | width presets / narrower / wider / center / tabs |
+| y b k j | fullscreen / maximize / floating / focus floating ↔ tiled |
+| ; = | stack into left column / unstack to the right |
+| [ ] / Backspace | notifications (control center) / clipboard / close |
+| arrows | volume + / − / mute / play-pause (F11: audio devices) |
+| Ins Del PgUp PgDn Home End | shortcuts / lock / last workspace / settings / other monitor / send there |
+| F8 F9 F10 F12, Print | power menu, screenshots (window / area / screen), Print = area without Mod |
+| c i a x | Speech Note: dictate / stop / read clipboard / cancel |
+| Scroll Lock | pass keys to the focused app (games, VMs) and back |
 
-`Mod` is Super. keyd turns held Right Alt into Super, using your existing
-keyd config, so Right Alt stays both Mod and AltGr for Polish letters.
+The default desktop wallpaper is a cheat sheet of this keyboard
+(`artwork/make-cheatsheet.py`; after changing binds, edit it and run
+`python3 artwork/make-cheatsheet.py system_files/usr/share/backgrounds/fedora-noctalia`).
+The plain `noctalia-night-*.jpg` versions are in `/usr/share/backgrounds/fedora-noctalia/`.
 
-To customise per user: `cp /etc/xdg/umbriel/config.toml ~/.config/umbriel/` and edit it.
-The user file replaces the system one completely.
+App configs in `/etc/skel` come from fedora-gnc: Helix, Ghostty and foot (fish
+shell, paste with Ctrl+V), k9s plugins.

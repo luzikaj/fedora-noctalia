@@ -1,0 +1,22 @@
+#!/bin/bash
+# Once after installing: the installer writes its own keyboard choice (e.g.
+# Polish QWERTY); put right-handed Dvorak back on the console, login screen and
+# X11 keymap. (Same as onehand-keyboard-check --firstboot in fedora-gnc.)
+set -uo pipefail
+want=""
+for m in dvorak-r us-dvorak-r; do
+    find /usr/lib/kbd/keymaps -name "$m.map*" 2>/dev/null | grep -q . && { want=$m; break; }
+done
+if [[ -n $want ]]; then
+    localectl set-keymap --no-convert "$want" 2>/dev/null || {
+        grep -q '^KEYMAP=' /etc/vconsole.conf 2>/dev/null \
+            && sed -i "s/^KEYMAP=.*/KEYMAP=\"$want\"/" /etc/vconsole.conf \
+            || echo "KEYMAP=\"$want\"" >> /etc/vconsole.conf; }
+fi
+localectl set-x11-keymap --no-convert us "" dvorak-r 2>/dev/null || true
+systemctl restart systemd-vconsole-setup.service 2>/dev/null || true
+if grep -qvE '^\s*(#|$)' /etc/crypttab 2>/dev/null; then
+    systemd-run --no-block --unit=noctalia-dracut --description="Rebuild boot image (Dvorak unlock prompt)" dracut -f >/dev/null 2>&1 || true
+fi
+mkdir -p /var/lib/fedora-noctalia && touch /var/lib/fedora-noctalia/keyboard-set
+echo "Console and login keyboard: ${want:-?} / us(dvorak-r)"

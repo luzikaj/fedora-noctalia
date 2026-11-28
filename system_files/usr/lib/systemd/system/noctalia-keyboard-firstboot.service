@@ -1,0 +1,14 @@
+[Unit]
+Description=Right-handed Dvorak on the console and login screen (once, after installing)
+ConditionPathExists=!/var/lib/fedora-noctalia/keyboard-set
+After=local-fs.target dbus.socket systemd-vconsole-setup.service
+Wants=dbus.socket
+Before=greetd.service getty@tty1.service systemd-user-sessions.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/fedora-noctalia/keyboard-firstboot
+TimeoutStartSec=60
+
+[Install]
+WantedBy=multi-user.target

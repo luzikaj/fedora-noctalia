@@ -28,9 +28,16 @@ google-noto-sans-fonts
 google-noto-color-emoji-fonts
 jetbrains-mono-fonts-all
 
+# --- Keyboard: Right Alt = Mod / Polish letters, sticky Ctrl+Shift (Terra)
+keyd
+
 # --- CLI / tools
 helix
 foot
+fish
+pavucontrol
+kbd
+libxkbcommon-utils
 git
 wl-clipboard
 brightnessctl
