@@ -55,6 +55,7 @@ Edit the repo and push. CI also rebuilds weekly.
 
 ## Keyboard & keybinds (one-handed, right hand)
 
+Built for a Logitech G413 TKL (no numpad; dedicated PrtSc/ScrLk/Pause; Fn right of Alt Gr).
 Same setup as [fedora-gnc](https://github.com/luzikaj/fedora-gnc) (see its `docs/keyboard.md`):
 
 | Where | Layout |

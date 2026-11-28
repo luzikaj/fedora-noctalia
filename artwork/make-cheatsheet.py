@@ -20,7 +20,7 @@ W, H = 3840, 2160
 OUT = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
 
 # ---------------------------------------------------------------- content ---
-# Physical keyboard (TKL), each key labelled with what it types on dvorak_r_pl
+# Physical keyboard (Logitech G413 TKL: Fn right of Alt Gr), each key labelled with what it types on dvorak_r_pl
 # (right-handed Dvorak). Keep in sync with system_files/etc/xdg/umbriel/config.toml.
 # key = (label, Mod-action or "", width in units, group)
 _ = ""
@@ -42,7 +42,8 @@ MAIN = [
      ("v", "send ↑", 1, "ws"), ("g", "send ↓", 1, "ws"), ("'", "launcher", 1, "app"),
      ("Shift", "tap: sticky", 2.75, "keyd")],
     [("Ctrl", _, 1.25, _), ("Win", _, 1.25, _), ("Alt", _, 1.25, _), ("Space", _, 6.25, _),
-     ("Alt Gr", "hold: Mod", 1.25, "keyd"), ("Menu", _, 1.25, _), ("Ctrl", "tap: sticky", 2.5, "keyd")],
+     ("Alt Gr", "hold: Mod", 1.25, "keyd"), ("Fn", _, 1.25, _), ("Menu", _, 1.25, _),
+     ("Ctrl", "tap: sticky", 1.25, "keyd")],
 ]
 FROW = [("F8", "power", "app"), ("F9", "shot win", "shot"), ("F10", "shot area", "shot"),
         ("F11", "audio", "sound"), ("F12", "shot screen", "shot")]
